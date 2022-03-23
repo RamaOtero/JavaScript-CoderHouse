@@ -1,9 +1,11 @@
 const marcas = [
-    { id: "0", marca: 'Adidas', precio: 22000, color: "Negro", img:"./Assets/adidasFoto2.jpg"},
-    { id: "1", marca: 'Nike', precio: 21000, color: "Blanco", img:"./Assets/nikeFoto.jpg"},
-    { id: "2", marca: 'Puma', precio: 19000, color: "Rosa", img:"./Assets/pumaFoto2.jpg"},
-    { id: "3", marca: 'New Balance', precio: 19500, color: "Amarillo", img:"./Assets/newbalanceFoto.jpg"},
-    { id: "4", marca: 'Fila', precio: 18500, color: "Verde", img:"./Assets/filaFoto.jpg"},]
+    { id: "0", marca: 'Adidas Boost', precio: 22000, color: "Negro", img:"./Assets/adidasFoto.jpg"},
+    { id: "1", marca: 'Nike Air', precio: 21000, color: "Blanco", img:"./Assets/nikeFoto.jpg"},
+    { id: "2", marca: 'Puma RS', precio: 19000, color: "Rosa", img:"./Assets/pumaFoto.jpg"},
+    { id: "3", marca: 'New Balance 550', precio: 19500, color: "Amarillo", img:"./Assets/newbalanceFoto.jpg"},
+    { id: "4", marca: 'Fila Tracker', precio: 18500, color: "Verde", img:"./Assets/filaFoto.jpg"},
+    { id: "5", marca: 'Converse Chuck Taylor', precio: 17000, color: "Negro", img:"./Assets/converseFoto.jpg"},
+    { id: "6", marca: 'Nike Air Force 1 High', precio: 23000, color: "Blanco", img:"./Assets/nikeFoto2.jpg"},]
 
 const container = document.getElementById("container")
 const contenedorCarrito = document.getElementById("contenedorCarrito")
