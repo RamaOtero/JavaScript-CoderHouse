@@ -1,3 +1,4 @@
+    //DATOS
 const marcas = [
     { id: "0", marca: 'Adidas Boost', precio: 22000, color: "Negro", img:"./Assets/adidasFoto.jpg"},
     { id: "1", marca: 'Nike Air', precio: 21000, color: "Blanco", img:"./Assets/nikeFoto.jpg"},
@@ -6,10 +7,30 @@ const marcas = [
     { id: "4", marca: 'Fila Tracker', precio: 18500, color: "Verde", img:"./Assets/filaFoto.jpg"},
     { id: "5", marca: 'Converse Chuck Taylor', precio: 17000, color: "Negro", img:"./Assets/converseFoto.jpg"},
     { id: "6", marca: 'Nike Air Force 1 High', precio: 23000, color: "Blanco", img:"./Assets/nikeFoto2.jpg"},]
+    
+const usuarios = [
+        {nombre:"Ramiro", clave:"12345",status:"admin"},
+        {nombre:"Agos", clave:"12345",status:"comun"},
+    ]
 
-const container = document.getElementById("container")
-const contenedorCarrito = document.getElementById("contenedorCarrito")
-const carrito = []
+    // NODOS
+    const container = document.getElementById("container")
+    const contenedorCarrito = document.getElementById("contenedorCarrito")
+    const botonCarrito = document.getElementById("btnCarrito")
+    const contenedorLogin = document.getElementById('login');
+    const inputUsuario = document.getElementById('usuario');
+    const inputClave = document.getElementById('clave');
+    const btnLogin = document.getElementById('btnLogin');
+    const errorLogin = document.getElementById('errorLogin');
+    const carrito = []
+
+    // Logica
+
+    if (!localStorage.getItem('marcas')) localStorage.setItem('marcas', JSON.stringify(marcas));
+
+    const renderizarTienda = (objetosMarcas) => {
+
+        container.innerHTML = '';
 
 for (const marca of marcas) {
     const cartaUno = document.createElement("div");
@@ -24,14 +45,66 @@ for (const marca of marcas) {
     cartaUno.innerHTML += `<h2> ${ marca.marca } </h2>`;
     cartaUno.innerHTML += precio;
 
-    botonComprar.onclick = ()=> {
+    botonComprar.onclick = () => {
         const productoComprado = marcas.find(marca => marca.id === botonComprar.id);
-        carrito.push({nombre:productoComprado.marca, precio:productoComprado.precio})
-    }
+        carrito.push({ nombre: productoComprado.marca, precio: productoComprado.precio })
+        localStorage.setItem("carrito", JSON.stringify(carrito))
+      }
+     
 
     container.append(cartaUno)
     cartaUno.append(botonComprar)
 }
+}
+const login = () => {
+
+    const usuarioLogueado = usuarios.find(usuario => usuario.nombre === inputUsuario.value)
+  
+    if (!usuarioLogueado) {
+  
+      errorLogin.append('El usuario ingresado no existe');
+  
+    } else {
+  
+      if (usuarioLogueado.clave === inputClave.value) {
+        
+        loginCorrecto(usuarioLogueado);
+  
+      } else {
+        errorLogin.innerHTML = ""
+        errorLogin.append('La clave ingresada es incorrecta');
+  
+      }
+  
+    }
+  
+  }
+  
+  const loginCorrecto = (usuario) => {
+    
+    errorLogin.classList.add('hidden')
+    renderizarTienda(JSON.parse(localStorage.getItem('marcas')))
+    contenedorCarrito.classList.remove("hidden");
+    contenedorLogin.classList.add('hidden');
+    localStorage.setItem('usuarioLogueado', JSON.stringify(usuario));
+  
+    if (usuario.tipo === 'admin') {
+  
+      container.classList.remove("hidden");
+      botonCarrito.classList.remove('hidden');
+  
+    } else {
+  
+      container.classList.remove("hidden");
+      botonCarrito.classList.remove('hidden');
+    }
+  
+  }
+
+  btnLogin.onclick = login;
+
+if(localStorage.getItem('usuarioLogueado')) loginCorrecto(JSON.parse(localStorage.getItem('usuarioLogueado')))
+
 
 const mostrarCarrito = ()=> {
     for (const marca of carrito) {
@@ -44,5 +117,4 @@ const mostrarCarrito = ()=> {
     contenedorCarrito.append(`Total Compra : ${total}`)
 }
 
-let botonCarrito = document.getElementById("btnCarrito")
 botonCarrito.onclick = mostrarCarrito;
