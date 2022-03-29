@@ -25,8 +25,7 @@ const usuarios = [
     const carrito = []
 
     // Logica
-
-    if (!localStorage.getItem('marcas')) localStorage.setItem('marcas', JSON.stringify(marcas));
+    !localStorage.getItem('marcas') && localStorage.setItem('marcas', JSON.stringify(marcas));
 
     const renderizarTienda = (objetosMarcas) => {
 
@@ -56,27 +55,17 @@ const usuarios = [
         cartaUno.append(botonComprar)
     }
 }
+
+const errorLoginClave = () => {
+  errorLogin.innerHTML = ""
+  errorLogin.append('La clave ingresada es incorrecta');
+}
+
 const login = () => {
 
     const usuarioLogueado = usuarios.find(usuario => usuario.nombre === inputUsuario.value)
   
-    if (!usuarioLogueado) {
-  
-      errorLogin.append('El usuario ingresado no existe');
-  
-    } else {
-  
-      if (usuarioLogueado.clave === inputClave.value) {
-        
-        loginCorrecto(usuarioLogueado);
-  
-      } else {
-        errorLogin.innerHTML = ""
-        errorLogin.append('La clave ingresada es incorrecta');
-  
-      }
-  
-    }
+    !usuarioLogueado ? errorLogin.append('El usuario ingresado no existe') : usuarioLogueado.clave === inputClave.value ? loginCorrecto(usuarioLogueado) : errorLoginClave();
   
   }
 
@@ -103,8 +92,7 @@ const login = () => {
 
 btnLogin.onclick = login;
 
-if(localStorage.getItem('usuarioLogueado')) loginCorrecto(JSON.parse(localStorage.getItem('usuarioLogueado')))
-
+localStorage.getItem('usuarioLogueado') && loginCorrecto(JSON.parse(localStorage.getItem('usuarioLogueado')))
 
 const mostrarCarrito = ()=> {
     for (const marca of carrito) {
