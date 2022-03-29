@@ -32,29 +32,29 @@ const usuarios = [
 
         container.innerHTML = '';
 
-for (const marca of marcas) {
-    const cartaUno = document.createElement("div");
-    const botonComprar = document.createElement("button");
-    cartaUno.className = "productosCartas__Uno";
-    const precio = `<h3>$${marca.precio}</h3>`;
-    const img = `<img src=${marca.img}>`;
-    botonComprar.className = "btn btn-primary";
-    botonComprar.append("Comprar");
-    botonComprar.id = `${marca.id}`;
-    cartaUno.innerHTML = img;
-    cartaUno.innerHTML += `<h2> ${ marca.marca } </h2>`;
-    cartaUno.innerHTML += precio;
-
-    botonComprar.onclick = () => {
-        const productoComprado = marcas.find(marca => marca.id === botonComprar.id);
-        carrito.push({ nombre: productoComprado.marca, precio: productoComprado.precio })
-        localStorage.setItem("carrito", JSON.stringify(carrito))
-      }
+    for (const marca of marcas) {
+        const cartaUno = document.createElement("div");
+        const botonComprar = document.createElement("button");
+        cartaUno.className = "productosCartas__Uno";
+        const precio = `<h3>$${marca.precio}</h3>`;
+        const img = `<img src=${marca.img}>`;
+        botonComprar.className = "btn btn-primary";
+        botonComprar.append("Comprar");
+        botonComprar.id = `${marca.id}`;
+        cartaUno.innerHTML = img;
+        cartaUno.innerHTML += `<h2> ${ marca.marca } </h2>`;
+        cartaUno.innerHTML += precio;
+    
+        botonComprar.onclick = () => {
+            const productoComprado = marcas.find(marca => marca.id === botonComprar.id);
+            carrito.push({ nombre: productoComprado.marca, precio: productoComprado.precio })
+            localStorage.setItem("carrito", JSON.stringify(carrito))
+          }
      
 
-    container.append(cartaUno)
-    cartaUno.append(botonComprar)
-}
+        container.append(cartaUno)
+        cartaUno.append(botonComprar)
+    }
 }
 const login = () => {
 
@@ -79,7 +79,16 @@ const login = () => {
     }
   
   }
-  
+
+  const loginAdmin = () => {
+    container.classList.remove("hidden");
+      botonCarrito.classList.remove('hidden');
+  }
+  const loginUser = () => {
+      container.classList.remove("hidden");
+      botonCarrito.classList.remove('hidden');
+  }
+
   const loginCorrecto = (usuario) => {
     
     errorLogin.classList.add('hidden')
@@ -88,20 +97,11 @@ const login = () => {
     contenedorLogin.classList.add('hidden');
     localStorage.setItem('usuarioLogueado', JSON.stringify(usuario));
   
-    if (usuario.tipo === 'admin') {
-  
-      container.classList.remove("hidden");
-      botonCarrito.classList.remove('hidden');
-  
-    } else {
-  
-      container.classList.remove("hidden");
-      botonCarrito.classList.remove('hidden');
-    }
+    usuario.tipo === 'admin' ? loginAdmin() : loginUser();
   
   }
 
-  btnLogin.onclick = login;
+btnLogin.onclick = login;
 
 if(localStorage.getItem('usuarioLogueado')) loginCorrecto(JSON.parse(localStorage.getItem('usuarioLogueado')))
 
