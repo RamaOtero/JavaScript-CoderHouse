@@ -23,7 +23,6 @@ const usuarios = [
     const btnLogin = document.getElementById('btnLogin');
     const errorLogin = document.getElementById('errorLogin');
     const carrito = []
-
     // Logica
 
     if (!localStorage.getItem('marcas')) localStorage.setItem('marcas', JSON.stringify(marcas));
@@ -49,6 +48,11 @@ const usuarios = [
             const productoComprado = marcas.find(marca => marca.id === botonComprar.id);
             carrito.push({ nombre: productoComprado.marca, precio: productoComprado.precio })
             localStorage.setItem("carrito", JSON.stringify(carrito))
+            Swal.fire(
+              'Confirmado',
+              'Agregado al carrito correctamente!',
+              'success'
+            )
           }
      
 
@@ -56,23 +60,40 @@ const usuarios = [
         cartaUno.append(botonComprar)
     }
 }
+
 const login = () => {
 
     const usuarioLogueado = usuarios.find(usuario => usuario.nombre === inputUsuario.value)
   
     if (!usuarioLogueado) {
-  
+      errorLogin.innerHTML = ""
       errorLogin.append('El usuario ingresado no existe');
-  
+      Swal.fire(
+        'Error!',
+        'El usuario es incorrecto!',
+        'error'
+      )
     } else {
   
       if (usuarioLogueado.clave === inputClave.value) {
         
         loginCorrecto(usuarioLogueado);
+        Toastify({
+          text: "Login Correcto!",
+          className: "info",
+          style: {
+            background: "green",
+          }
+        }).showToast();
   
       } else {
         errorLogin.innerHTML = ""
         errorLogin.append('La clave ingresada es incorrecta');
+        Swal.fire(
+          'Error!',
+          'La clave es incorrecta!',
+          'error'
+        )
   
       }
   
