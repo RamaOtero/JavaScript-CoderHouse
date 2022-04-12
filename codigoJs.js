@@ -17,15 +17,32 @@ const usuarios = [
     const container = document.getElementById("container")
     const contenedorCarrito = document.getElementById("contenedorCarrito")
     const botonCarrito = document.getElementById("btnCarrito")
+    const contenedorLoginRegister = document.getElementById("loginRegister");
     const contenedorLogin = document.getElementById('login');
+    const contenedorRegister = document.getElementById("register");
     const inputUsuario = document.getElementById('usuario');
+    const inputUsuarioRegister = document.getElementById("usuarioRegister");
     const inputClave = document.getElementById('clave');
+    const inputClaveRegister = document.getElementById("claveRegister");
+    const inputClaveConfirm = document.getElementById("claveConfirm");
     const btnLogin = document.getElementById('btnLogin');
     const errorLogin = document.getElementById('errorLogin');
-    const carrito = []
+    const btnCerrar = document.getElementById("btnClose");
+    const mapa = document.getElementById("mapa");
+    const apiEndpoint = "https://apis.datos.gob.ar/georef/api/provincias?id=06";
+    let carrito = []
     // Logica
 
     if (!localStorage.getItem('marcas')) localStorage.setItem('marcas', JSON.stringify(marcas));
+
+
+    const registro = () => {
+           
+
+      
+    }
+
+
 
     const renderizarTienda = (objetosMarcas) => {
 
@@ -46,8 +63,11 @@ const usuarios = [
     
         botonComprar.onclick = () => {
             const productoComprado = marcas.find(marca => marca.id === botonComprar.id);
-            carrito.push({ nombre: productoComprado.marca, precio: productoComprado.precio })
-            localStorage.setItem("carrito", JSON.stringify(carrito))
+
+            carrito.push({ nombre: productoComprado.marca, precio: productoComprado.precio });
+
+            localStorage.setItem("carrito", JSON.stringify(carrito));
+
             Swal.fire(
               'Confirmado',
               'Agregado al carrito correctamente!',
@@ -62,6 +82,7 @@ const usuarios = [
 }
 
 const login = () => {
+
 
     const usuarioLogueado = usuarios.find(usuario => usuario.nombre === inputUsuario.value)
   
@@ -116,6 +137,8 @@ const login = () => {
     renderizarTienda(JSON.parse(localStorage.getItem('marcas')))
     contenedorCarrito.classList.remove("hidden");
     contenedorLogin.classList.add('hidden');
+    contenedorRegister.classList.add("hidden");
+    contenedorLoginRegister.classList.add("hidden");
     localStorage.setItem('usuarioLogueado', JSON.stringify(usuario));
   
     usuario.tipo === 'admin' ? loginAdmin() : loginUser();
@@ -128,14 +151,58 @@ if(localStorage.getItem('usuarioLogueado')) loginCorrecto(JSON.parse(localStorag
 
 
 const mostrarCarrito = ()=> {
-    for (const marca of carrito) {
-        const nombreMarca = `<h4>Producto: ${marca.nombre}</h4>`
-        const precioMarca = `<h4>Precio: ${marca.precio}</h4>`
-        contenedorCarrito.innerHTML += nombreMarca
-        contenedorCarrito.innerHTML += precioMarca
-    }
-    const total = carrito.reduce ((accumulador,marca) => accumulador + marca.precio,0);
-    contenedorCarrito.append(`Total Compra : ${total}`)
+      contenedorCarrito.innerHTML = "";
+      for (const marca of carrito) {
+        const nombreMarca = `<h4>Producto: ${marca.nombre}</h4>`;
+        const precioMarca = `<h4>Precio: ${marca.precio}</h4>`;
+        contenedorCarrito.innerHTML += nombreMarca;
+        contenedorCarrito.innerHTML += precioMarca;
+      }
+      const total = carrito.reduce ((accumulador,marca) => accumulador + marca.precio,0);
+      
+      contenedorCarrito.append(`Total Compra : ${total}`);
+      
+      
+}
+botonCarrito.onclick = mostrarCarrito;
+
+const addmap = (provincias) => {
+
+  for (const provincia of provincias) {
+
+    mapa.innerHTML += `<div class="card" style="width: 30%;height:30%">
+                       <div id="map${provincia.id}" class="map"></div>
+                       <div class="card-body">
+                       <h5 class="card-title">${provincia.nombre}</h5>
+                       </div>
+                       </div><div>`;
+  }
+
+    initMap(provincia.centroide.lat, provincia.centroide.lon, "map" + provincia.id, provincia.nombre)
+  
+
 }
 
-botonCarrito.onclick = mostrarCarrito;
+  fetch(apiEndpoint)
+    .then((resp) => resp.json())
+    .then((data) => {
+      const provincias = data.provincias;
+      addmap(provincias)
+    })
+
+
+const initMap = (lat, lon, id, nombre) => {
+  var myLatLng = { lat: lat, lng: lon };
+
+  var map = new google.maps.Map(document.getElementById(id), {
+    zoom: 5,
+    center: myLatLng
+  });
+
+  var marker = new google.maps.Marker({
+    position: myLatLng,
+    map: map,
+    title: 'Este es el centro de ' + nombre
+  });
+}
+
