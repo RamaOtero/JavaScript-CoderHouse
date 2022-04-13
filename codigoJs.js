@@ -26,23 +26,35 @@ const usuarios = [
     const inputClaveRegister = document.getElementById("claveRegister");
     const inputClaveConfirm = document.getElementById("claveConfirm");
     const btnLogin = document.getElementById('btnLogin');
+    const btnRegister = document.getElementById("btnRegister");
     const errorLogin = document.getElementById('errorLogin');
+    const errorRegister = document.getElementById("errorRegister");
     const btnCerrar = document.getElementById("btnClose");
     const mapa = document.getElementById("mapa");
-    const apiEndpoint = "https://apis.datos.gob.ar/georef/api/provincias?id=06";
     let carrito = []
     // Logica
 
     if (!localStorage.getItem('marcas')) localStorage.setItem('marcas', JSON.stringify(marcas));
-
+    if (!localStorage.getItem('usuarios')) localStorage.setItem('usuarios', JSON.stringify(usuarios));
 
     const registro = () => {
-           
+        if (inputClaveRegister.value === inputClaveConfirm.value) {
+          Swal.fire(
+            'Confirmado',
+            '¡Se a registrado correctamente!',
+            'success',
+            )
+            const registroNuevo = usuarios.push ({nombre: inputUsuarioRegister.value, clave: inputClaveRegister.value, status: "comun"});
+            localStorage.setItem('usuarios', JSON.stringify(usuarios));
+          }
+         else {
+          errorRegister.innerHTML = "";
+          errorRegister.append('Las contraseñas no coinciden');
+         }
 
-      
     }
 
-
+    btnRegister.onclick = registro;
 
     const renderizarTienda = (objetosMarcas) => {
 
@@ -82,7 +94,6 @@ const usuarios = [
 }
 
 const login = () => {
-
 
     const usuarioLogueado = usuarios.find(usuario => usuario.nombre === inputUsuario.value)
   
@@ -165,44 +176,4 @@ const mostrarCarrito = ()=> {
       
 }
 botonCarrito.onclick = mostrarCarrito;
-
-const addmap = (provincias) => {
-
-  for (const provincia of provincias) {
-
-    mapa.innerHTML += `<div class="card" style="width: 30%;height:30%">
-                       <div id="map${provincia.id}" class="map"></div>
-                       <div class="card-body">
-                       <h5 class="card-title">${provincia.nombre}</h5>
-                       </div>
-                       </div><div>`;
-  }
-
-    initMap(provincia.centroide.lat, provincia.centroide.lon, "map" + provincia.id, provincia.nombre)
-  
-
-}
-
-  fetch(apiEndpoint)
-    .then((resp) => resp.json())
-    .then((data) => {
-      const provincias = data.provincias;
-      addmap(provincias)
-    })
-
-
-const initMap = (lat, lon, id, nombre) => {
-  var myLatLng = { lat: lat, lng: lon };
-
-  var map = new google.maps.Map(document.getElementById(id), {
-    zoom: 5,
-    center: myLatLng
-  });
-
-  var marker = new google.maps.Marker({
-    position: myLatLng,
-    map: map,
-    title: 'Este es el centro de ' + nombre
-  });
-}
 
