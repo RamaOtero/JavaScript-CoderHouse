@@ -30,6 +30,7 @@ const usuarios = [
     const errorLogin = document.getElementById('errorLogin');
     const errorRegister = document.getElementById("errorRegister");
     const btnCerrar = document.getElementById("btnClose");
+    const fondoLogReg = document.getElementById("fondoLogReg")
     const mapa = document.getElementById("mapa");
     let carrito = []
     // Logica
@@ -37,23 +38,28 @@ const usuarios = [
     if (!localStorage.getItem('marcas')) localStorage.setItem('marcas', JSON.stringify(marcas));
     if (!localStorage.getItem('usuarios')) localStorage.setItem('usuarios', JSON.stringify(usuarios));
 
-    const registro = () => {
-        if (inputClaveRegister.value === inputClaveConfirm.value) {
-          Swal.fire(
-            'Confirmado',
-            '¡Se a registrado correctamente!',
-            'success',
-            )
-            const registroNuevo = usuarios.push ({nombre: inputUsuarioRegister.value, clave: inputClaveRegister.value, status: "comun"});
-            localStorage.setItem('usuarios', JSON.stringify(usuarios));
-          }
-         else {
+    
+    const registro = () => { 
+      const usuariosLogueados = JSON.parse(localStorage.getItem('usuarios'))
+      let busquedaUserLog = usuariosLogueados.find(usuario => usuario.nombre === inputUsuarioRegister.value)
+
+      if (busquedaUserLog != undefined) {
+        errorRegister.innerHTML = "";
+        errorRegister.append('El usuario ya existe');
+      } if (inputClaveRegister.value != inputClaveConfirm.value) {
           errorRegister.innerHTML = "";
           errorRegister.append('Las contraseñas no coinciden');
+      } else if (busquedaUserLog === undefined) {
+        errorRegister.innerHTML = "";
+         Swal.fire(
+           'Confirmado',
+           '¡Se a registrado correctamente!',
+           'success',
+           )
+           const registroNuevo = usuarios.push ({nombre: inputUsuarioRegister.value, clave: inputClaveRegister.value, status: "comun"});
+           localStorage.setItem('usuarios', JSON.stringify(usuarios));
          }
-
-    }
-
+      }
     btnRegister.onclick = registro;
 
     const renderizarTienda = (objetosMarcas) => {
@@ -99,7 +105,6 @@ const login = () => {
   
     if (!usuarioLogueado) {
       errorLogin.innerHTML = ""
-      errorLogin.append('El usuario ingresado no existe');
       Swal.fire(
         'Error!',
         'El usuario es incorrecto!',

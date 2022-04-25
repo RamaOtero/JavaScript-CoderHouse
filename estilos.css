@@ -40,31 +40,43 @@
       }
       .fondoLoginRegister {
           background-image: url(./Assets/fondoLoginRegister.jpg);
-          background-size: 100%;
+          background-position-x: center;
           background-repeat: no-repeat;
-          height: 100vh;
           background-position-y: center;
+          background-size: cover;
+          flex-wrap: wrap;
         }
       .login-register {
           display: flex;
           justify-content: space-around;
           margin: 15vh 10vw 0vh 10vw;
+          flex-wrap: wrap;
       }
+
       .register-tienda {
         justify-content: center;
         align-items: center;
         display: flex;
         flex-direction: column;
         background-color: rgb(255, 255, 255);
-        height: 50vh;
-        width: 25vw;
         box-shadow: 5px 0 50px rgba(0,0,0,.6);
+        padding: 25px 10px 25px 10px;
+        margin-bottom: 50px;
+        width: 275px;
       }
       .register-tienda label {
         font-family: 'Open Sans', sans-serif;
         font-weight: 600;
         color: rgba(0, 0, 0, 0.658);
         margin: 10px 0px 10px 0px;
+    }
+    .regSpan {
+        font-family:'Open Sans', sans-serif;
+        font-style: italic;
+        font-weight: 900;
+        font-size: 1.5rem;
+        margin-bottom: 10px;
+        color:rgb(52, 67, 110);
     }
     .register-tienda input {
         border: none;
@@ -79,9 +91,11 @@
           display: flex;
           flex-direction: column;
           background-color: rgb(255, 255, 255);
-          height: 50vh;
-          width: 25vw;
+          height: 300px;
+          width: 275px;
           box-shadow: 5px 0 20px rgba(0, 0, 0, 0.945);
+          padding: 60px 10px 60px 10px;
+          margin-bottom: 20px;
       }
       .login-tienda label {
           font-family: 'Open Sans', sans-serif;
@@ -93,6 +107,14 @@
           border: none;
           border-bottom: 2px solid gray;
       }
+      .logSpan {
+        font-family:'Open Sans', sans-serif;
+        font-style: italic;
+        font-weight: 900;
+        font-size: 1.5rem;
+        margin-bottom: 10px;
+        color:rgb(52, 67, 110);
+      }
       .btnIngre {
           margin-top: 25px;
       }
@@ -102,8 +124,8 @@
     margin-right: 20px;
 }
 .productosCartas {
-    flex-wrap: wrap;
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-around;
     align-items: center;
     background-color: rgb(204, 198, 198);
@@ -149,6 +171,24 @@
 
 .carritoContenedor h4 {
     margin: 10px 0px 5px 15px;
+}
+.footer {
+    height: 20vh;
+    background-color: rgb(0, 0, 0);
+    display:inline-block;
+    text-align: center;
+    width: 100%;
+    box-shadow: 0 -10px 20px rgba(0, 0, 0, 0.918);
+}
+.footer span {
+    color: rgb(167, 167, 167);
+}
+.footerIcons {
+    margin:20px 0 25px 0;
+    color: black;
+}
+.footerIcons1 {
+    margin: 0 20px 0 20px;
 }
 .hidden{
     display: none;
