@@ -38,12 +38,11 @@ const usuarios = [
     if (!localStorage.getItem('marcas')) localStorage.setItem('marcas', JSON.stringify(marcas));
     if (!localStorage.getItem('usuarios')) localStorage.setItem('usuarios', JSON.stringify(usuarios));
 
-    
     const registro = () => { 
       const usuariosLogueados = JSON.parse(localStorage.getItem('usuarios'))
       let busquedaUserLog = usuariosLogueados.find(usuario => usuario.nombre === inputUsuarioRegister.value)
 
-      if (busquedaUserLog != undefined) {
+       if (busquedaUserLog != undefined) {
         errorRegister.innerHTML = "";
         errorRegister.append('El usuario ya existe');
       } if (inputClaveRegister.value != inputClaveConfirm.value) {
@@ -60,7 +59,24 @@ const usuarios = [
            localStorage.setItem('usuarios', JSON.stringify(usuarios));
          }
       }
-    btnRegister.onclick = registro;
+
+
+      const validaCampos = () => {
+        
+        const valorClaveRegister = inputClaveRegister.value
+
+       if (!inputUsuarioRegister.value || !inputClaveRegister.value || !inputClaveConfirm.value) {
+        errorRegister.innerHTML = "";
+        errorRegister.append('CAMPO VACÍO');
+       } else if (valorClaveRegister.length < 5) {
+        errorRegister.innerHTML = "";
+        errorRegister.append('Debe tener 5 caracteres como mínimo!');
+       } else {
+         registro()
+       }
+      }
+
+    btnRegister.onclick = validaCampos;
 
     const renderizarTienda = (objetosMarcas) => {
 

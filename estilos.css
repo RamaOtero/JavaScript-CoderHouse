@@ -190,6 +190,14 @@
 .footerIcons1 {
     margin: 0 20px 0 20px;
 }
+.error {
+    font-size: 0.8rem;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 700;
+    font-style: italic;
+    margin-top: 15px;
+    color: #d43c3c;
+}
 .hidden{
     display: none;
   }
