@@ -10,7 +10,7 @@ const marcas = [
     
 const usuarios = [
         {nombre:"Ramiro", clave:"12345",status:"admin"},
-        {nombre:"Agos", clave:"12345",status:"comun"},
+        {nombre:"Agos", clave:"12345",status:"admin"},
     ]
 
     // NODOS
@@ -30,14 +30,51 @@ const usuarios = [
     const errorLogin = document.getElementById('errorLogin');
     const errorRegister = document.getElementById("errorRegister");
     const btnCerrar = document.getElementById("btnClose");
-    const fondoLogReg = document.getElementById("fondoLogReg")
-    const mapa = document.getElementById("mapa");
+    const fondoLogReg = document.getElementById("fondoLogReg");
+    const botonCerrarCarrito = document.getElementById('botonCerrarCarrito');
     let carrito = []
     // Logica
 
     if (!localStorage.getItem('marcas')) localStorage.setItem('marcas', JSON.stringify(marcas));
     if (!localStorage.getItem('usuarios')) localStorage.setItem('usuarios', JSON.stringify(usuarios));
 
+    const renderizarTienda = (objetosMarcas) => {
+      container.innerHTML = '';
+    
+    for (const marca of marcas) {
+      const cartaUno = document.createElement("div");
+      const botonComprar = document.createElement("button");
+      cartaUno.className = "productosCartas__Uno";
+      const precio = `<h3>$${marca.precio}</h3>`;
+      const img = `<img src=${marca.img}>`;
+      botonComprar.className = "btn btn-primary";
+      botonComprar.append("Comprar");
+      botonComprar.id = `${marca.id}`;
+      cartaUno.innerHTML = img;
+      cartaUno.innerHTML += `<h2> ${ marca.marca } </h2>`;
+      cartaUno.innerHTML += precio;
+    
+      botonComprar.onclick = () => {
+          const productoComprado = marcas.find(marca => marca.id === botonComprar.id);
+    
+          carrito.push({ nombre: productoComprado.marca, precio: productoComprado.precio });
+    
+          localStorage.setItem("carrito", JSON.stringify(carrito));
+    
+          Swal.fire(
+            'Confirmado',
+            'Agregado al carrito correctamente!',
+            'success'
+          )
+
+          mostrarCarrito()
+        }
+    
+      container.append(cartaUno)
+      cartaUno.append(botonComprar)
+    }
+    }
+    
     const registro = () => { 
       const usuariosLogueados = JSON.parse(localStorage.getItem('usuarios'))
       let busquedaUserLog = usuariosLogueados.find(usuario => usuario.nombre === inputUsuarioRegister.value)
@@ -77,43 +114,6 @@ const usuarios = [
       }
 
     btnRegister.onclick = validaCampos;
-
-    const renderizarTienda = (objetosMarcas) => {
-
-        container.innerHTML = '';
-
-    for (const marca of marcas) {
-        const cartaUno = document.createElement("div");
-        const botonComprar = document.createElement("button");
-        cartaUno.className = "productosCartas__Uno";
-        const precio = `<h3>$${marca.precio}</h3>`;
-        const img = `<img src=${marca.img}>`;
-        botonComprar.className = "btn btn-primary";
-        botonComprar.append("Comprar");
-        botonComprar.id = `${marca.id}`;
-        cartaUno.innerHTML = img;
-        cartaUno.innerHTML += `<h2> ${ marca.marca } </h2>`;
-        cartaUno.innerHTML += precio;
-    
-        botonComprar.onclick = () => {
-            const productoComprado = marcas.find(marca => marca.id === botonComprar.id);
-
-            carrito.push({ nombre: productoComprado.marca, precio: productoComprado.precio });
-
-            localStorage.setItem("carrito", JSON.stringify(carrito));
-
-            Swal.fire(
-              'Confirmado',
-              'Agregado al carrito correctamente!',
-              'success'
-            )
-          }
-     
-
-        container.append(cartaUno)
-        cartaUno.append(botonComprar)
-    }
-}
 
 const login = () => {
 
@@ -167,7 +167,6 @@ const login = () => {
     
     errorLogin.classList.add('hidden')
     renderizarTienda(JSON.parse(localStorage.getItem('marcas')))
-    contenedorCarrito.classList.remove("hidden");
     contenedorLogin.classList.add('hidden');
     contenedorRegister.classList.add("hidden");
     contenedorLoginRegister.classList.add("hidden");
@@ -181,20 +180,25 @@ btnLogin.onclick = login;
 
 if(localStorage.getItem('usuarioLogueado')) loginCorrecto(JSON.parse(localStorage.getItem('usuarioLogueado')))
 
-
 const mostrarCarrito = ()=> {
       contenedorCarrito.innerHTML = "";
       for (const marca of carrito) {
-        const nombreMarca = `<h4>Producto: ${marca.nombre}</h4>`;
-        const precioMarca = `<h4>Precio: ${marca.precio}</h4>`;
+        const nombreMarca = `<h5>${marca.nombre}</h5>`;
+        const precioMarca = `<h5>${marca.precio}</h5>`;
         contenedorCarrito.innerHTML += nombreMarca;
         contenedorCarrito.innerHTML += precioMarca;
       }
-      const total = carrito.reduce ((accumulador,marca) => accumulador + marca.precio,0);
-      
-      contenedorCarrito.append(`Total Compra : ${total}`);
-      
-      
+      const total = carrito.reduce ((acumulador,marca) => acumulador + marca.precio,0);
+      const totalTexto = `<h4>Total Compra : ${total}</h4>`;
+      contenedorCarrito.innerHTML += totalTexto;
+      contenedorCarrito.append(botonCerrarCarrito);
+      contenedorCarrito.classList.remove('hidden');
 }
+
+cerrarCarrito = () => {
+  contenedorCarrito.classList.add('hidden');
+}
+
+botonCerrarCarrito.onclick = cerrarCarrito;
 botonCarrito.onclick = mostrarCarrito;
 
